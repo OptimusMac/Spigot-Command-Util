@@ -1,3 +1,7 @@
+![Java](https://img.shields.io/badge/Java-3776AB?style=flat&logo=java&logoColor=white)
+![Minecraft](https://img.shields.io/badge/Minecraft-55C8A2?style=flat&logo=Minecraft&logoColor=white)
+
+
 # 🌟 **CommandUtil** - Мощное API для команд на Spigot! 🚀
 
 Добро пожаловать в **CommandUtil** — API для создания и управления командами на Spigot с использованием аннотаций! 🎮✨
@@ -140,10 +144,6 @@ public void onEnable() {
 ### 📌 **Заключение** 📌
 
 **CommandUtil** — это не просто инструмент для работы с командами, это целая магия, которая делает ваш код проще, понятнее и красивее! 🚀✨  
-
-![Java](https://img.shields.io/badge/Java-3776AB?style=flat&logo=java&logoColor=white)
-![Minecraft](https://img.shields.io/badge/Minecraft-55C8A2?style=flat&logo=Minecraft&logoColor=white)
-
 
 Если у вас есть вопросы или предложения, не стесняйтесь задавать их. Мы всегда рады помочь! 💬  
 

@@ -80,3 +80,11 @@ public class Command extends AbstractCommand {
   }
 }
 ```
+
+## 🛠️ **Как начать** 🛠️
+
+1. Добавьте адаптер в `onEnable` вашего плагина:
+
+```java
+new ClassFinder("ru.optimus.commands.commands", this).register();
+```

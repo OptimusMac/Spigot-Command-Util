@@ -2,26 +2,22 @@ package ru.optimus.commands.executes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ru.optimus.commands.annotations.AsCommand;
 import ru.optimus.commands.annotations.Description;
 import ru.optimus.commands.annotations.HelpCommand;
 import ru.optimus.commands.annotations.Messages;
+import ru.optimus.commands.annotations.logging.Logging;
 import ru.optimus.commands.annotations.logging.LoggingService;
 import ru.optimus.commands.asm.AsmAdapter;
 import ru.optimus.commands.asm.LoggingWriter;
@@ -78,7 +74,7 @@ public abstract class AbstractCommand extends Command {
       this.sender = sender;
       boolean execute = onCommand(sender, a);
 
-      if (execute) {
+      if (execute && this.getClass().isAnnotationPresent(Logging.class)) {
         loggingWriter.write(sender, command.name(), a, getClass());
         return true;
       }
@@ -98,7 +94,7 @@ public abstract class AbstractCommand extends Command {
 
     setName(command.name());
     setPermission(command.permission());
-    setAliases(List.of(command.aliases()));
+    setAliases(Arrays.asList(command.aliases()));
     if (messages != null) {
       setPermissionMessage(messages.permission());
     }
@@ -106,11 +102,14 @@ public abstract class AbstractCommand extends Command {
 
   public abstract boolean onCommand(CommandSender sender, String[] args);
 
+  public abstract List<String> tabCompleter(@NotNull CommandSender sender, @NotNull Command command,
+      @NotNull String label, @NotNull String[] args);
+
 
   public void sendHelp(CommandSender sender, JavaPlugin request, JavaPlugin receiver) {
     HelpCommand helpCommand = getClass().getAnnotation(HelpCommand.class);
     if (helpCommand == null) {
-      throw new RuntimeException("User method sendHelp can only with annotation HelpCommand");
+      throw new RuntimeException("Use method sendHelp can only with annotation HelpCommand");
     }
 
     AsCommand asCommand = getClass().getAnnotation(AsCommand.class);
@@ -165,7 +164,7 @@ public abstract class AbstractCommand extends Command {
   public Argument getArgument(String argument) {
     return new Argument(getArgumentValue(argument).orElseGet(() -> {
       Messages messages = getClass().getAnnotation(Messages.class);
-      if(messages != null){
+      if (messages != null) {
         sender.sendMessage(messages.exceptionMessage());
       }
       return null;
@@ -183,8 +182,9 @@ public abstract class AbstractCommand extends Command {
 
   public ArgumentQueue getArgumentQueue(String... args) {
     List<Argument> argumentQueues = this.arguments.stream()
-        .filter(value -> List.of(args).contains(value))
-        .map(value -> new Argument(getArgumentValue(value).orElse(null))).toList();
+        .filter(value -> Arrays.asList(args).contains(value))
+        .filter(Objects::nonNull)
+        .map(value -> new Argument(getArgumentValue(value).orElse(null))).collect(Collectors.toList());
     return new ArgumentQueue(argumentQueues);
   }
 

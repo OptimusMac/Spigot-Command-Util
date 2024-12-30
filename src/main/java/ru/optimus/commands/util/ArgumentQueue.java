@@ -1,13 +1,11 @@
 package ru.optimus.commands.util;
 
-import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.Consumer;
 
 public class ArgumentQueue {
 
-  private final Queue<Argument> arguments = new ArrayDeque<>();
+  private final QueueCasted<Argument> arguments = new QueueCasted<>();
 
 
   public ArgumentQueue(List<Argument> argumentList) {
@@ -15,10 +13,10 @@ public class ArgumentQueue {
   }
 
 
-  public void execute(Consumer<Queue<String>> consumer) {
-    Queue<String> values = new ArrayDeque<>();
+  public void execute(Consumer<QueueCasted<String>> consumer) {
+    QueueCasted<String> values = new QueueCasted<>();
     while (!arguments.isEmpty()) {
-      values.add(arguments.poll().name());
+      values.add(arguments.poll().getName());
     }
     consumer.accept(values);
   }

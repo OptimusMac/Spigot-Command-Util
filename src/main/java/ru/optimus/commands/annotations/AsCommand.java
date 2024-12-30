@@ -14,10 +14,11 @@ import javax.inject.Qualifier;
 public @interface AsCommand {
 
   String name();
-  int args() default 0;
+  int args() default -1;
   String permission();
   boolean onlyPlayer() default true;
   String[] aliases();
+
 
 
 }
